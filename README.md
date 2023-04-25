@@ -26,14 +26,14 @@ for i in ret:
 airtest run test.air --device Windows:///?title_re=Unity.*
 ```
 其中
-==test.air==
+**test.air**
 是要执行的.air文件名，
-==--device Windows:///?title_re=Unity.*==
+**--device Windows:///?title_re=Unity.***
 则是指定的需要连接的窗口，在WP脚本使用中，如果是直接连接Windows窗口而不指定特定窗口，则使用
-==--device Windows:///==
+**--device Windows:///**
 即可。
 
-需要说明的是，在WP脚本中存在着  ==有序脚本==  的操作，这会对.air文件的 ==命名== 提出要求。由于
+需要说明的是，在WP脚本中存在着  **有序脚本**  的操作，这会对.air文件的 **命名** 提出要求。由于
 `os.walk(path) ` 
 方法，获取的列表顺序是无序列表，如文件名中带有要实现有序执行的.air文件，则在文件夹进行命名时，以有序数字开头，并使用一下示例方法
 ```python
@@ -43,7 +43,7 @@ filelist.sort(key=lambda x: int(x.split('.')[0]))
 
 ## 方法二
 
-使用==WP连跑小工具==进行连跑操作。  
+使用**WP连跑小工具**进行连跑操作。  
 使用小工具对环境有以下要求：
 ```  
 1.python
