@@ -52,7 +52,7 @@ pip install airtest
 进行安装
 ```
 小工具界面如下：
-![工具界面](ToolInterface.png)
+![工具界面](https://github.com/OkayMing/AirtestTool/blob/master/ToolInterface.png)
 该工具使用pyqt5开发，具有以下功能：  
 1.检索使用Airtest开发的ui自动化脚本，能被检索到的文件夹名格式为
 `*T*.air`；  
