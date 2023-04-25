@@ -1,4 +1,4 @@
-#WP脚本连续执行方法
+#关于Airtest的.air脚本连续执行方法
 ##方法一
 利用python的sys库，模拟cmd执行。以下代码为例：  
 
@@ -47,13 +47,15 @@ filelist.sort(key=lambda x: int(x.split('.')[0]))
 使用小工具对环境有以下要求：
 ```  
 1.python
-2.pip install airtest
+2.airtest  #每次运行小工具，会自动检查是否含有此库，没有则会自动运行
+pip install airtest
+进行安装
 ```
 小工具界面如下：
-![工具界面](WP连跑小工具界面.png)
+![工具界面](ToolInterface.png)
 该工具使用pyqt5开发，具有以下功能：  
 1.检索使用Airtest开发的ui自动化脚本，能被检索到的文件夹名格式为
-`T*.air`；  
+`*T*.air`；  
 2.对已获取的文件夹列表进行刷新；  
 3.勾选需要进行连跑的脚本，并开始运行，运行中的Log将打印在右侧Log窗口中；  
 4.对Log进行检查，直接显示脚本运行结果为 OK/FAIL（有bug，修改中）;  
