@@ -111,7 +111,7 @@ class AutoUI(QWidget):
         self.Clear.setText("清空窗口")
         self.Savelog.setText("保存Log")
         self.setLayout(self.horizontalLayout)
-        
+
 
         self.select.clicked.connect(self.scan_airfile)
         self.refresh.clicked.connect(self.refreshfilelist)
