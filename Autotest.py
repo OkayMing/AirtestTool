@@ -7,16 +7,13 @@ import time
 from PyQt5.QtWidgets import QAbstractItemView,QApplication,QTextBrowser,QHBoxLayout,QPushButton,QTreeWidget,QWidget,QFileDialog,QTreeWidgetItem,QVBoxLayout
 from PyQt5.QtCore import Qt,QThread,pyqtSignal,QSize
 from PyQt5.QtGui import QGuiApplication
-try:
-    import airtest
-except ImportError:
-    os.system('pip install airtest -i https://pypi.tuna.tsinghua.edu.cn/simple')
 
 
 
 
 class Runtask(QThread):
     textSignal = pyqtSignal(str)
+    resultSignal = pyqtSignal(str)
     def __init__(self,rootpath):
         super(Runtask,self).__init__()
         self.rootpath = rootpath
@@ -40,14 +37,24 @@ class Runtask(QThread):
                 buff = self.p.stdout.readline()
                 if buff != '':
                     self.textSignal.emit(buff)
-                if buff.find('FAILED') != -1 or buff.find('OK') != -1:
-                    self.textSignal.emit('************************' + i + ' 测试完成****************************')
+                if buff.find('FAILED') != -1 :
+                    self.textSignal.emit('************************' + i + ' 测试失败****************************')
+                    self.resultSignal.emit(i + ' is FAILED')
                     break
-
+                elif buff.find('OK') != -1:
+                    self.textSignal.emit('************************' + i + ' 测试通过****************************')
+                    self.resultSignal.emit(i + ' is OK')
+                    break
 
 class AutoUI(QWidget):
     def __init__(self,parent=None):
         super().__init__(parent)
+
+        try:
+            import airtest
+        except ImportError:
+            self.Logbrowser.append('缺少airtest库，正在自动安装，请稍等')
+            os.system('pip install airtest -i https://pypi.tuna.tsinghua.edu.cn/simple')
 
         self.list_add = []
         self.rootfile = ''
@@ -91,6 +98,9 @@ class AutoUI(QWidget):
         self.Logbrowser.setMinimumSize(QSize(500, 0))
         self.Logbrowser.setObjectName("Logbrowser")
         self.horizontalLayout.addWidget(self.Logbrowser)
+        self.Resultbrowser = QTextBrowser()
+        self.Resultbrowser.setMinimumSize(QSize(500, 0))
+        self.Resultbrowser.setObjectName("Resultbrowser")
 
         self.select.setText( "选择脚本目录")
         self.refresh.setText( "刷新脚本列表")
@@ -104,6 +114,7 @@ class AutoUI(QWidget):
         self.select.clicked.connect(self.scan_airfile)
         self.refresh.clicked.connect(self.refreshfilelist)
         self.Run.clicked.connect(self.run_airfile)
+        self.Resultcheck.clicked.connect(self.logresultswap)
         self.Clear.clicked.connect(self.clearlog)
         self.Filetree.itemChanged.connect(self.checkboxStateChange)
         self.Savelog.clicked.connect(self.savelog)
@@ -152,6 +163,7 @@ class AutoUI(QWidget):
         if self.Run.text() == '开始运行':
             self.rThread = Runtask(rootpath = self.root)
             self.rThread.textSignal.connect(self.log_print)
+            self.rThread.resultSignal.connect(self.resultcheck)
             self.rThread.start()
             self.Run.setText('停止运行')
         else:
@@ -161,17 +173,27 @@ class AutoUI(QWidget):
         #os.system('python -m airtest run ' + self.root.text(0)+ '/' + i +' --device Windows:///')
 
 
-    def clearlog(self):
-        self.Logbrowser.clear()
+    def resultcheck(self,resultSignal):
+        self.Resultbrowser.append(resultSignal)
 
-    def checkboxStateChange(self,item,column):#选中树形列表中的父节点，子节点全部选中
-        count = item.childCount()
-        if item.checkState(column) == Qt.Checked:
-            for f in range(count):
-                item.child(f).setCheckState(0, Qt.Checked)
-        if item.checkState(column) == Qt.Unchecked:
-            for f in range(count):
-                item.child(f).setCheckState(0, Qt.Unchecked)
+
+    def logresultswap(self):
+        if self.Logbrowser.isVisible() == True:
+            self.horizontalLayout.replaceWidget(self.Logbrowser,self.Resultbrowser)
+            self.Logbrowser.hide()
+            self.Resultbrowser.show()
+        else:
+            self.horizontalLayout.replaceWidget(self.Resultbrowser,self.Logbrowser)
+            self.Resultbrowser.hide()
+            self.Logbrowser.show()
+
+
+    def clearlog(self):
+        if self.Logbrowser.isVisible() == True:
+            self.Logbrowser.clear()
+        else:
+            self.Resultbrowser.clear()
+
 
 
     def savelog(self):
@@ -183,6 +205,14 @@ class AutoUI(QWidget):
             print(e)
 
 
+    def checkboxStateChange(self,item,column):#选中树形列表中的父节点，子节点全部选中
+            count = item.childCount()
+            if item.checkState(column) == Qt.Checked:
+                for f in range(count):
+                    item.child(f).setCheckState(0, Qt.Checked)
+            if item.checkState(column) == Qt.Unchecked:
+                for f in range(count):
+                    item.child(f).setCheckState(0, Qt.Unchecked)
 '''class redirect_stdout():
     def __init__(self):
         self.oldstdout = sys.stdout # 原控制台输出通道
