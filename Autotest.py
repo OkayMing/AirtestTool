@@ -21,7 +21,7 @@ class Runtask(QThread):
 
 
     def stop(self):
-        os.system('taskkill /t /f /pid {}'.format(self.p.pid))
+        os.popen('taskkill /t /f /pid {}'.format(self.p.pid))
 
 
     def run(self):
