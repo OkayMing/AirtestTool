@@ -14,6 +14,7 @@ from PyQt5.QtGui import QGuiApplication
 class Runtask(QThread):
     textSignal = pyqtSignal(str)
     resultSignal = pyqtSignal(str)
+    stateSignal = pyqtSignal(int)
     def __init__(self,rootpath):
         super(Runtask,self).__init__()
         self.rootpath = rootpath
@@ -45,6 +46,7 @@ class Runtask(QThread):
                     self.textSignal.emit('************************' + i + ' 测试通过****************************')
                     self.resultSignal.emit(i + ' is OK')
                     break
+        self.stateSignal.emit(0)
 
 class AutoUI(QWidget):
     def __init__(self,parent=None):
@@ -164,6 +166,7 @@ class AutoUI(QWidget):
             self.rThread = Runtask(rootpath = self.root)
             self.rThread.textSignal.connect(self.log_print)
             self.rThread.resultSignal.connect(self.resultcheck)
+            self.rThread.stateSignal.connect(self.statecheck)
             self.rThread.start()
             self.Run.setText('停止运行')
         else:
@@ -171,6 +174,11 @@ class AutoUI(QWidget):
             self.Run.setText('开始运行')
             self.Logbrowser.append('\n任务已停止\n')
         #os.system('python -m airtest run ' + self.root.text(0)+ '/' + i +' --device Windows:///')
+
+
+    def statecheck(self,stateSignal):
+        if stateSignal == 0:
+            self.Run.setText('开始运行')
 
 
     def resultcheck(self,resultSignal):
@@ -193,7 +201,6 @@ class AutoUI(QWidget):
             self.Logbrowser.clear()
         else:
             self.Resultbrowser.clear()
-
 
 
     def savelog(self):
