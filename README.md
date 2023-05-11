@@ -1,6 +1,17 @@
 # 关于Airtest的.air脚本连续执行方法
+在使用Airtest进行UI自动化测试中，希望对于编写好的测试脚本能够拥有类robotframework的连续执行和自动执行的功能。但由于Airtest未开放连续执行功能，特此探索实现airtest实现自动执行的方法。  
+总共总结出如下两种方法。
 ## 方法一
-利用python的sys库，模拟cmd执行。以下代码为例：  
+根据[airtest官方文档](https://airtest.doc.io.netease.com/tutorial/7_Windows_automated_testing/)提供的信息，可以在命令行中输入以下指令，执行.air文件：
+```cmd
+airtest run test.air --device Windows:///?title_re=Unity.*
+```
+其中
+**test.air**
+是要执行的.air文件名，
+**--device Windows:///?title_re=Unity.***
+则是指定的需要连接的窗口。  
+因此可以利用python的sys库，模拟cmd执行。以下代码为例：  
 
 ```python
 import os
@@ -21,17 +32,13 @@ for i in ret:
 通过方法：
 `os.walk(path)`
 遍历目标路径下的所有.air文件夹，并返回list。  
-根据[airtest官方文档](https://airtest.doc.io.netease.com/tutorial/7_Windows_automated_testing/)提供的信息，可以在命令行中输入以下指令，执行.air文件：
-```cmd
+根据WP自动化测试的需求，在
+`
 airtest run test.air --device Windows:///?title_re=Unity.*
-```
-其中
-**test.air**
-是要执行的.air文件名，
-**--device Windows:///?title_re=Unity.***
-则是指定的需要连接的窗口，在WP脚本使用中，如果是直接连接Windows窗口而不指定特定窗口，则使用
+`
+中指定的需要连接的窗口应是直接连接Windows窗口而不指定特定窗口，因此使用
 **--device Windows:///**
-即可。
+即可。  
 
 需要说明的是，在WP脚本中存在着  **有序脚本**  的操作，这会对.air文件的 **命名** 提出要求。由于
 `os.walk(path) ` 
