@@ -29,8 +29,8 @@ def is_company_network():
 def writeUpgrade(exe_name):
     b = open("upgrade.bat",'w')
     TempList = "@echo off\n"
-    TempList += "if not exist" + 'z:\\' + exe_name + " exit \n"  #判断是否有新版本的程序，没有就退出更新。
-    TempList += "echo 正在更新至最新版本...\n"
+    TempList += "spawn ssh cmy@10.12.192.62"  #判断是否有新版本的程序，没有就退出更新。
+    TempList += "expect cmy@10.12.192.62's password:"
     TempList += "timeout /t 10 /nobreak\n"  #等待10秒
     TempList += "del " + os.path.realpath(exe_name) + "\n" #删除旧程序
     TempList += "copy  z:\\" + exe_name + " " + exe_name + '\n' #复制新版本程序
