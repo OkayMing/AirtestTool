@@ -121,7 +121,17 @@ class AutoUI(QWidget):
         self.Filetree.itemChanged.connect(self.checkboxStateChange)
         self.Savelog.clicked.connect(self.savelog)
         #self.Filetree.itemChanged.connect(self.onclick)
+        self.checkenv()
 
+
+    def checkenv(self):
+        try:
+            import airtest
+            self.Logbrowser.append('airtest已安装，可进行测试')
+        except:
+            self.Logbrowser.append('缺少airtest库，正在自动安装，请稍等')
+            os.system('pip install airtest -i https://pypi.tuna.tsinghua.edu.cn/simple')
+            self.Logbrowser.append('airtest已安装，可进行测试')
 
 
     def log_print(self,s):

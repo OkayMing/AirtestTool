@@ -69,5 +69,5 @@ pip install airtest
 5.将Log窗口中的所有内容保存为txt，并自动命名为`{%Y-%m-%d-%H-%M}测试log.txt`;  
 6.停止功能;  
 
-
-
+后续将继续开发：
+- [ ] 通过ftp自动更新软件功能
