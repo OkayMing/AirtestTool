@@ -49,13 +49,22 @@ def checkVersion(): #检查版本
         print('连接公司内网后进行更新')
     if not os.path.isdir('z:\\'):  #判断是否有z盘，没有就mount，使用mount命令需要提前安装好NFS客户端
         server_path = f'\\\\10.12.192.62\home\cmy\\atc\Personal_Folder\CMY\WPAutotest'
-    config = configparser.ConfigParser()  # 类实例化
-    path = f'{server_path}\\version.ini'
-    print(path)
-    config.read(path)
-    value = config['select']['version'] #获取版本号
-    print(value)
-    return value
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy()) 
+        ssh.connect(hostname ='10.12.192.62' , port=22, username='cmy', password='cmy')
+        stdin, stdout, stderr = ssh.exec_command('cat ~/atc/Personal_Folder/CMY/WPAutotest/version.ini')
+        newversion = stdout.read().decode()[18:]
+        #print(newversion)
+        #config = configparser.ConfigParser()  # 类实例化
+        #config.read(versioninfo)
+        #value = config['select']['version'] #获取版本号
+        #print(value)
+    #path = f'{server_path}\\version.ini'
+    #print(path)
+    #config.read(path)
+    #value = config['select']['version'] #获取版本号
+    #print(value)
+    return newversion
     #也可以使用以下代码获取程序版本号
     #url = r'http://172.18.114.172/index.html'
     #value = requests.get(url).text

@@ -260,7 +260,7 @@ if __name__ == '__main__':
     try:
         if updateApp(version): 	#检查是否有新版本
             time.sleep(2)		#强制等待2秒
-            update.writeUpgrade("多课程同时学习.exe")	#更新程序
+            update.writeUpgrade("Autotest.exe")	#更新程序
             #break
         QGuiApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
         app=QApplication(sys.argv)
