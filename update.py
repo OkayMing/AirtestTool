@@ -27,20 +27,32 @@ def is_company_network():
 
 #编写bat脚本，删除旧程序，运行新程序
 def writeUpgrade(exe_name):
-    b = open("upgrade.bat",'w')
-    TempList = "@echo off\n"
-    TempList += "spawn ssh cmy@10.12.192.62"  #判断是否有新版本的程序，没有就退出更新。
-    TempList += "expect cmy@10.12.192.62's password:"
+    #b = open("upgrade.bat",'w')
+    b = open("upgrade.py",'w')
+    #TempList = "@echo off\n"
+    '''TempList = "ssh cmy@10.12.192.62\n"  #判断是否有新版本的程序，没有就退出更新。
+    TempList += "timeout /t 2 /nobreak\n"  #等待2秒
+    TempList += "cmy\n"
     TempList += "timeout /t 10 /nobreak\n"  #等待10秒
     TempList += "del " + os.path.realpath(exe_name) + "\n" #删除旧程序
     TempList += "copy  z:\\" + exe_name + " " + exe_name + '\n' #复制新版本程序
     TempList += "echo 更新完成，正在启动...\n"
     TempList += "timeout /t 3 /nobreak\n"
-    TempList += "start " + exe_name   #"start 1.bat\n"
-    TempList += "exit"
+    TempList += "start " + exe_name + '\n'   #"start 1.bat\n"
+    TempList += "exit"'''
+    TempList = "# coding=UTF-8\n\n"
+    TempList += "import os\n"
+    TempList += "import paramiko\n\n"
+    TempList += "os.remove(os.getcwd()+'\Autotest.exe')\n"
+    TempList += "ssh = paramiko.Transport(('10.12.192.62',22))\n"
+    TempList += "ssh.connect(username='cmy', password='cmy')\n"
+    TempList += "stfp = paramiko.SFTPClient.from_transport(ssh)\n"
+    TempList += "stfp.get('/home/cmy/atc/Personal_Folder/CMY/WPAutotest/Autotest.exe',os.getcwd()+'\Autotest.exe')\n"
+    TempList += "stfp.close()\n"
+    TempList += "ssh.close()\n"
     b.write(TempList)
     b.close()
-    subprocess.Popen("upgrade.bat") #不显示cmd窗口
+    subprocess.Popen("python upgrade.py") #不显示cmd窗口
     #os.system('start upgrade.bat')  #显示cmd窗口
     #如果是FTP就编写FTP的相应代码
 

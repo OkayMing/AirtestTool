@@ -244,8 +244,8 @@ class AutoUI(QWidget):
 
 def updateApp(version):
     newVersion = update.checkVersion()	#获取新版本号
-    if os.path.isfile("upgrade.bat"):	#判断是否有upgrade.bat这个文件，有就删除
-        os.remove("upgrade.bat")
+    if os.path.isfile("upgrade.py"):	#判断是否有upgrade.bat这个文件，有就删除
+        os.remove("upgrade.py")
     if version < newVersion:	#判断当前程序是否是最新版本
         print('当前版本：', version, '\t最新版本：', newVersion)
         return True
@@ -253,8 +253,7 @@ def updateApp(version):
 
 
 if __name__ == '__main__':
-    version = 'v0.1'
-    print('最新版本：', version)
+    version = '0.0'
     dirname, filename = os.path.split(os.path.abspath(sys.argv[0]))		#获取当前程序的路径
     #while True:  #重复执行
     try:
@@ -266,10 +265,10 @@ if __name__ == '__main__':
         app=QApplication(sys.argv)
         win=AutoUI()
         win.show()
+        os.remove("upgrade.py")
         #sys.stdout = redirect_stdout()
         sys.exit(app.exec_())#替换成你的自动化函数
-    except:			#当try中的代码运行出错后执行以下代码
+    except:	#当try中的代码运行出错后执行以下代码
         #当自动化的代码出现错误结束了运行，在这里将浏览器关闭
         print('ERROR ReLoading...')
         #continue
-    
