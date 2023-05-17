@@ -54,7 +54,6 @@ def writeUpgrade(exename):
     TempList += "stfp.get('/home/cmy/atc/Personal_Folder/CMY/WPAutotest/"+exename+"',r'"+ os.getcwd()+"\\"+exename+"')\n"#将新程序传送到本地
     TempList += "stfp.close()\n"
     TempList += "ssh.close()\n"
-    TempList += "time.sleep(2)\n"
     TempList += "os.system('start " + exename +"')"#打开运行新程序
     b.write(TempList)
     b.close()
