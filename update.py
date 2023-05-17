@@ -33,14 +33,14 @@ def writeUpgrade(exename):
     TempList += "import time\n"
     TempList += "import subprocess\n"
     TempList += "import paramiko\n\n"
-    TempList += "os.remove(os.getcwd()+'\\"+exename+"')\n"
-    TempList += "ssh = paramiko.Transport(('10.12.192.62',22))\n"
+    TempList += "os.remove(os.getcwd()+'\\"+exename+"')\n"#移除旧程序
+    TempList += "ssh = paramiko.Transport(('10.12.192.62',22))\n"#使用paramiko进行ssh连接
     TempList += "ssh.connect(username='cmy', password='cmy')\n"
     TempList += "stfp = paramiko.SFTPClient.from_transport(ssh)\n"
-    TempList += "stfp.get('/home/cmy/atc/Personal_Folder/CMY/WPAutotest/"+exename+"',r'"+ os.getcwd()+"\\"+exename+"')\n"
+    TempList += "stfp.get('/home/cmy/atc/Personal_Folder/CMY/WPAutotest/"+exename+"',r'"+ os.getcwd()+"\\"+exename+"')\n"#下载新程序
     TempList += "stfp.close()\n"
     TempList += "ssh.close()\n"
-    TempList += "os.system('start " + exename +"')"
+    TempList += "os.system('start " + exename +"')"#打开运行新程序
     b.write(TempList)
     b.close()
     subprocess.Popen("python upgrade.py") #不显示cmd窗口
