@@ -51,7 +51,7 @@ def writeUpgrade(exename):
     TempList += "ssh = paramiko.Transport(('10.12.192.62',22))\n"
     TempList += "ssh.connect(username='cmy', password='cmy')\n"
     TempList += "stfp = paramiko.SFTPClient.from_transport(ssh)\n"
-    TempList += "stfp.get('/home/cmy/atc/Personal_Folder/CMY/WPAutotest/"+exename+"','"+ os.getcwd()+"\\"+exename+"')\n"
+    TempList += "stfp.get('/home/cmy/atc/Personal_Folder/CMY/WPAutotest/"+exename+"',r'"+ os.getcwd()+"\\"+exename+"')\n"
     TempList += "stfp.close()\n"
     TempList += "ssh.close()\n"
     TempList += "time.sleep(2)\n"
