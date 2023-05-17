@@ -122,7 +122,14 @@ class AutoUI(QWidget):
         self.Filetree.itemChanged.connect(self.checkboxStateChange)
         self.Savelog.clicked.connect(self.savelog)
         #self.Filetree.itemChanged.connect(self.onclick)
+        self.versionpri()
         self.checkenv()
+
+
+
+    def versionpri(self):
+        global version
+        self.Logbrowser.append('版本为:'+version)
 
 
     def checkenv(self):
@@ -253,22 +260,24 @@ def updateApp(version):
 
 
 if __name__ == '__main__':
-    version = '0.0'
+    version = '0.1' #re.findall(r'v(.*)\.',os.path.basename(sys.argv[0]))[0]  #一个问题：版本不会随更新而更新，所以采取文件名的更新方式
     dirname, filename = os.path.split(os.path.abspath(sys.argv[0]))		#获取当前程序的路径
     #while True:  #重复执行
-    try:
-        if updateApp(version): 	#检查是否有新版本
-            time.sleep(2)		#强制等待2秒
-            update.writeUpgrade("Autotest.exe")	#更新程序
-            #break
+#try:
+    if updateApp(version): 	#检查是否有新版本
+        time.sleep(2)		#强制等待2秒
+        update.writeUpgrade('Autotest.exe')	#更新程序,曾尝试使用oldversion/newversion的方式进行，可行，但不够便捷
+        sys.exit()
+    else:
+        if os.path.isfile("upgrade.py"):	#判断是否有upgrade.bat这个文件，有就删除
+            os.remove("upgrade.py")
         QGuiApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
         app=QApplication(sys.argv)
         win=AutoUI()
         win.show()
-        os.remove("upgrade.py")
         #sys.stdout = redirect_stdout()
         sys.exit(app.exec_())#替换成你的自动化函数
-    except:	#当try中的代码运行出错后执行以下代码
-        #当自动化的代码出现错误结束了运行，在这里将浏览器关闭
-        print('ERROR ReLoading...')
-        #continue
+#except:	#当try中的代码运行出错后执行以下代码
+    #当自动化的代码出现错误结束了运行，在这里将浏览器关闭
+    #print('ERROR ReLoading...')
+    #continue
