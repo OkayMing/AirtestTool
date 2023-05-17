@@ -251,13 +251,16 @@ if __name__ == '__main__':
     dirname, filename = os.path.split(os.path.abspath(sys.argv[0]))		#获取当前程序的路径
     #while True:  #重复执行
 #try:
-    if updateApp(version): 	#检查是否有新版本
-        time.sleep(2)		#强制等待2秒
-        update.writeUpgrade('Autotest.exe')	#更新程序,曾尝试使用oldversion/newversion的方式进行，可行，但不够便捷
-        sys.exit()
-    else:
-        if os.path.isfile("upgrade.py"):	#判断是否有upgrade.bat这个文件，有就删除
-            os.remove("upgrade.py")
+    try:#添加是否装有paramiko判断，无则直接启动
+        import paramiko
+        if updateApp(version): 	#检查是否有新版本
+            time.sleep(2)		#强制等待2秒
+            update.writeUpgrade('Autotest.exe')	#更新程序,曾尝试使用oldversion/newversion的方式进行，可行，但不够便捷
+            sys.exit()
+        else:
+            if os.path.isfile("upgrade.py"):	#判断是否有upgrade.bat这个文件，有就删除
+                os.remove("upgrade.py")
+    finally:
         QGuiApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
         app=QApplication(sys.argv)
         win=AutoUI()
