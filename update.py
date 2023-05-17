@@ -40,7 +40,6 @@ def writeUpgrade(exename):
     TempList += "stfp.get('/home/cmy/atc/Personal_Folder/CMY/WPAutotest/"+exename+"',r'"+ os.getcwd()+"\\"+exename+"')\n"
     TempList += "stfp.close()\n"
     TempList += "ssh.close()\n"
-    TempList += "time.sleep(2)\n"
     TempList += "os.system('start " + exename +"')"
     b.write(TempList)
     b.close()

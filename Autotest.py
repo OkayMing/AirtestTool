@@ -247,7 +247,7 @@ def updateApp(version):
 
 
 if __name__ == '__main__':
-    version = '0.1' 
+    version = '0.1' #版本标注
     dirname, filename = os.path.split(os.path.abspath(sys.argv[0]))		#获取当前程序的路径
     #while True:  #重复执行
 #try:
