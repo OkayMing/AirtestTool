@@ -121,7 +121,6 @@ class AutoUI(QWidget):
         self.Clear.clicked.connect(self.clearlog)
         self.Filetree.itemChanged.connect(self.checkboxStateChange)
         self.Savelog.clicked.connect(self.savelog)
-        #self.Filetree.itemChanged.connect(self.onclick)
         self.versionpri()
         self.checkenv()
 
@@ -143,7 +142,6 @@ class AutoUI(QWidget):
 
 
     def log_print(self,s):
-        #self.Logbrowser.append(str)
         self.Logbrowser.append(s)
 
 
@@ -191,7 +189,6 @@ class AutoUI(QWidget):
             self.rThread.stop()
             self.Run.setText('开始运行')
             self.Logbrowser.append('\n任务已停止\n')
-        #os.system('python -m airtest run ' + self.root.text(0)+ '/' + i +' --device Windows:///')
 
 
     def statecheck(self,stateSignal):
@@ -238,16 +235,6 @@ class AutoUI(QWidget):
             if item.checkState(column) == Qt.Unchecked:
                 for f in range(count):
                     item.child(f).setCheckState(0, Qt.Unchecked)
-'''class redirect_stdout():
-    def __init__(self):
-        self.oldstdout = sys.stdout # 原控制台输出通道
-    def write(self, message):
-        # print('a')==sys.stdout.write('a') and sys.stdout.write('\n')
-        self.oldstdout.write(message) # 仍在控制台输出
-        if message!="\n": # 在PyQt的"Plain Text Edit"添加内容
-            win.Logbrowser.append(message)
-    def flush(self):
-        pass'''
 
 def updateApp(version):
     newVersion = update.checkVersion()	#获取新版本号
@@ -260,7 +247,7 @@ def updateApp(version):
 
 
 if __name__ == '__main__':
-    version = '0.1' #re.findall(r'v(.*)\.',os.path.basename(sys.argv[0]))[0]  #一个问题：版本不会随更新而更新，所以采取文件名的更新方式
+    version = '0.1' 
     dirname, filename = os.path.split(os.path.abspath(sys.argv[0]))		#获取当前程序的路径
     #while True:  #重复执行
 #try:
@@ -275,9 +262,5 @@ if __name__ == '__main__':
         app=QApplication(sys.argv)
         win=AutoUI()
         win.show()
-        #sys.stdout = redirect_stdout()
         sys.exit(app.exec_())#替换成你的自动化函数
-#except:	#当try中的代码运行出错后执行以下代码
-    #当自动化的代码出现错误结束了运行，在这里将浏览器关闭
-    #print('ERROR ReLoading...')
-    #continue
+
